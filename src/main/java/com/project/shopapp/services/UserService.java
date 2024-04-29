@@ -1,6 +1,9 @@
 package com.project.shopapp.services;
 
+import java.util.Optional;
+
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.shopapp.dtos.UserDTO;
@@ -18,6 +21,7 @@ public class UserService implements IUserService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(UserDTO userDTO) throws DataNotFoundException {
@@ -39,14 +43,19 @@ public class UserService implements IUserService {
         user.setRole(role);
         if (userDTO.getFacebookAccountId() == 0 && userDTO.getGoogleAccountId() == 0) {
             String password = userDTO.getPassword();
+            String encodedPassword = passwordEncoder.encode(password);
+            user.setPassword(encodedPassword);
         }
         return userRepository.save(user);
     }
 
     @Override
-    public String login(String phoneNumber, String password) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'login'");
+    public User login(String phoneNumber, String password) throws DataNotFoundException {
+        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+        if (user.isEmpty()){
+            throw new DataNotFoundException("Invalid phonenumber or password");
+        }
+        return user.get();
     }
 
 }

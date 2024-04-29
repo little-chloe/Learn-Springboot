@@ -9,13 +9,14 @@ import com.project.shopapp.exceptions.DataNotFoundException;
 import com.project.shopapp.exceptions.InvalidParamException;
 import com.project.shopapp.models.Product;
 import com.project.shopapp.models.ProductImage;
+import com.project.shopapp.responses.ProductResponse;
 
 public interface IProductService {
     public Product createProduct(ProductDTO productDTO) throws DataNotFoundException;
 
     Product getProductById(Long id) throws DataNotFoundException;
 
-    Page<Product> getAllProducts(PageRequest pageRequest);
+    Page<ProductResponse> getAllProducts(PageRequest pageRequest);
 
     Product updateProduct(long id, ProductDTO productDTO) throws DataNotFoundException;
 

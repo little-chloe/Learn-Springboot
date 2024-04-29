@@ -15,12 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.shopapp.dtos.OrderDTO;
+import com.project.shopapp.models.Order;
+import com.project.shopapp.services.IOrderService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("${api.prefix}/orders")
+@RequiredArgsConstructor
 public class OrderController {
+
+    private final IOrderService orderService;
 
     @PostMapping
     public ResponseEntity<?> createOrder(@Valid @RequestBody OrderDTO orderDTO, BindingResult result) {
@@ -30,7 +36,8 @@ public class OrderController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
-            return ResponseEntity.ok(orderDTO.toString());
+            Order orderResponse = orderService.createOrder(orderDTO);
+            return ResponseEntity.ok(orderResponse);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

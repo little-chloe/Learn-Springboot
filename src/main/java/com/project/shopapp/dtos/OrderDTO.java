@@ -1,5 +1,8 @@
 package com.project.shopapp.dtos;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.Min;
@@ -50,4 +53,7 @@ public class OrderDTO {
 
     @JsonProperty("payment_method")
     private String paymentMethod;
+
+    @JsonProperty("shipping_date")
+    private LocalDate shippingDate;
 }
